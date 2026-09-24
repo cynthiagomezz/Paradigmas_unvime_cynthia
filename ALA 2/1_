@@ -1,0 +1,15 @@
+Paradigmas de Programacion: A lo aprendio 2.
+
+Gomez Milagros Cynthia Abigail.
+Programador Universitario en Sistemas
+
+Ejercicio 1
+1.1_Considera el lenguaje TypeScript acotado al paradigma de programación estructurada y analízalo en términos de los cuatro componentes de un paradigma mencionados por Kuhn.
+Generalización simbólica: ¿Cuáles son las reglas escritas del lenguaje?
+
+Son la sintaxis formal, la gramática y el sistema de tipos estático que define la especificación oficial de TypeScript (sumado a la base de ECMAScript) para determinar si un código es válido antes de compilar. En el modelo estructurado, incluye las estructuras de control (if, switch, for, while), la sintaxis para definir funciones con sus parámetros y tipos de retorno (function suma(a: number): number), la declaración estricta de variables con alcance de bloque (let, const) y las reglas de asignación del compilador (tsc).
+
+1.2_Creencias de los profesionales: ¿Qué características particulares del lenguaje se
+cree que sean "mejores" que en otros lenguajes?
+
+Es la convicción de la comunidad de que añadir un sistema de tipos estático sobre una base imperativa hace al desarrollo mucho más seguro y eficiente que en JavaScript puro o en lenguajes estructurados tradicionales. Principalmente se valora la capacidad de detectar errores de tipo en tiempo de compilación antes de ejecutar el código, la mejora en la experiencia de desarrollo (gracias al autocompletado e IntelliSense en el editor) y el hecho de que las firmas de las funciones sirven como documentación implícita, lo que facilita leer, mantener y refactorizar el código en equipo.
