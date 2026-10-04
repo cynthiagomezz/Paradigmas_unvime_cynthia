@@ -1,1 +1,15 @@
-m
+1. Generalización simbólica: ¿Cuáles son las reglas escritas del lenguaje?
+
+JavaScript permite trabajar con objetos y utiliza prototipos para relacionarlos entre si. Un objeto puede tener propiedades y métodos y tambien puede acceder a los que tiene su prototipo.
+
+Se pueden crear objetos y modificar sus propiedades y metodos. Tambien se pueden usar clases, pero estas funcionan sobre el sistema de prototipos de JavaScript.
+
+Por eso no es necesario usar clases para trabajar con objetos, ya que se pueden relacionar directamente mediante los prototipos.
+
+2. Creencias de los profesionales: ¿Qué características particulares del lenguaje se cree que sean "mejores" que en otros lenguajes?
+
+Una de las cosas que se considera buena de JavaScript es que es bastante flexible. Se pueden crear y modificar objetos de una forma dinamica y no es obligatorio trabajar con clases.
+
+Tambien es bastante usado porque sirve para programar tanto en el navegador como del lado del servidor usando Node.js.
+
+Otra ventaja es que se puede hacer bastante con el mismo lenguaje, aunque esa flexibilidad tambien puede ser un problema si no se entiende bien como funcionan los objetos y los prototipos.
