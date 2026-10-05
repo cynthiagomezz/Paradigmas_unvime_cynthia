@@ -1,0 +1,15 @@
+En los ejercicios 2 y 3, que fueron los programas de Calculadora y Gestor de Tareas, utilice algunas caracteristicas de la programación orientada a objetos. La idea fue organizar el programa usando objetos, donde cada uno tiene sus propios datos y métodos para trabajar con ellos.
+
+Una de las caracteristicas que utilice fue la abstracción, porque cada clase representa algo concreto del programa y tiene solamente los datos y funciones que necesitamos. Por ejemplo, en el ejercicio de Calculadora hice una clase `Calculadora` que tiene métodos como `sumar`, `restar`, `multiplicar` y `dividir`. Entonces no necesito saber cómo funciona internamente cada operación, solamente llamo al método y le paso los números que necesito.
+
+También utilicé encapsulamiento, aunque de una forma bastante básica. La información y las operaciones relacionadas con un objeto están dentro del mismo objeto. Por ejemplo, en el Gestor de Tareas la lista de tareas pertenece al gestor y los métodos como `agregarTarea()` y `obtenerTodasTareas()` trabajan sobre esa lista. Así no tengo que modificar la lista desde cualquier parte del programa, sino que puedo hacerlo usando los métodos del gestor.
+
+Otra característica que utilicé fue la modularidad, porque separé el programa en diferentes archivos. Por ejemplo, en el ejercicio de tareas tenía un archivo para `Tarea`, otro para `GestorTarea` y otro para el programa principal. Esto ayuda a que cada parte del programa tenga una función más específica y también hace que sea más fácil modificar alguna parte sin tener todo el código junto.
+
+En JavaScript también trabajamos con objetos y métodos, teniendo en cuenta que JavaScript utiliza un modelo basado en prototipos. Por ejemplo, los métodos pueden estar definidos en el prototipo de un objeto y después ser utilizados por las diferentes instancias.
+
+No utilicé algunas características más avanzadas de la OOP como la herencia y el polimorfismo. En estos ejercicios no era necesario porque no teníamos diferentes tipos de objetos relacionados entre sí que necesitaran compartir o modificar comportamientos. Por ejemplo, en el Gestor de Tareas todas las tareas son del mismo tipo, entonces no tendría mucho sentido crear otra clase que heredara de Tarea solamente para usar herencia.
+
+Tampoco era necesario hacer diferentes tipos de calculadoras que heredaran de una clase `Calculadora`, porque el ejercicio se podía resolver simplemente con una clase y sus métodos.
+
+En conclusion, en estos ejercicios utilicé principalmente la abstraccion, el encapsulamiento, los objetos y la modularidad. La herencia y el polimorfismo no fueron necesarios porque los problemas que resolví no tenían una estructura donde estas características ayudaran realmente. Creo que no tiene sentido agregarlas solamente para decir que las utilicé, sino que deberían usarse cuando realmente sean necesarias para resolver el problema.
