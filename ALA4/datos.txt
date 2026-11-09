@@ -18,5 +18,25 @@
     "creacion": "2026-11-06T18:32:31.043Z",
     "edicion": "2026-11-06T18:32:31.043Z",
     "dificultad": 1
+  },
+  {
+    "id": 3,
+    "titulo": "holaaaa",
+    "descripcion": "",
+    "estado": 1,
+    "fechaVencimiento": null,
+    "creacion": "2026-11-09T01:03:03.939Z",
+    "edicion": "2026-11-09T01:03:03.939Z",
+    "dificultad": 1
+  },
+  {
+    "id": 4,
+    "titulo": "Holaa",
+    "descripcion": "",
+    "estado": 1,
+    "fechaVencimiento": null,
+    "creacion": "2026-11-09T02:18:19.566Z",
+    "edicion": "2026-11-09T02:18:19.566Z",
+    "dificultad": 1
   }
 ]

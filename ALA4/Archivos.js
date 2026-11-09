@@ -7,7 +7,8 @@ export const leerDatos=async ()=>{
   try{
     let recuperarDatos = await fs.readFile("./datos.txt","utf8");
     datos = JSON.parse(recuperarDatos);
-    return datos;
+    let fechasCorregidas = datos.map(d=> ({...d , creacion: new Date(d.creacion), edicion : new Date(d.edicion)}));
+    return fechasCorregidas;
   }
   catch(error){
     if(error instanceof SyntaxError){

@@ -244,7 +244,7 @@ const buscarTareaMenu= async (tareas)=>{
     for(const t of coincidencias){
         console.log(`Id:[${t.id}] ${t.titulo}`);
     }
-    const nuevaLista = await preDetalleId(tareas);
+    const nuevaLista = await preDetalleId(coincidencias);
     return nuevaLista;
 }
 
