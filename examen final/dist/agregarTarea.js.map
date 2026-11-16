@@ -1,0 +1,1 @@
+{"version":3,"file":"agregarTarea.js","sourceRoot":"","sources":["../src/agregarTarea.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,KAAK,EAAC,MAAM,YAAY,CAAC;AAEhC,MAAM,CAAC,MAAM,YAAY,GAAG,CAAC,MAAc,EAAC,UAAgB,EAAU,EAAE;IACrE,MAAM,UAAU,GAAG,CAAC,GAAG,MAAM,EAAC,UAAU,CAAC,CAAC;IAC1C,OAAO,UAAU,CAAC;AACrB,CAAC,CAAA"}
