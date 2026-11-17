@@ -6,7 +6,7 @@ import {filtrarPorEstado, validarEstado, verDetalleId,buscarPorId} from "./mostr
 import {crearTareaEditada, reemplazarTarea} from "./editarTarea.js";
 import {buscarTarea} from "./buscarTarea.js";
 
-//import {leerDatos, guardarDatosJson} from "./archivos.js";
+import {leerDatos, guardarDatosJson} from "./archivos.js";
 import * as readline from "node:readline";
 
 let tareas:Tarea[]=[];
@@ -50,7 +50,7 @@ const agregarTareaMenu = async(tareas:Tarea[]):Promise<Tarea[]>=>{
     const nuevaTarea:Tarea = new Tarea(tareas,titulo,descripcion,vencimiento);
     tareas = agregarTarea(tareas,nuevaTarea);
     console.log("¡TAREA AGREGADA CON EXITO!\n");
-//    await guardarDatosJson(tareas);
+    await guardarDatosJson(tareas);
     return tareas;
 }
 
@@ -172,10 +172,12 @@ const preDetalleId= async(tareas:Tarea[],coincidencias=tareas):Promise<Tarea[]>=
                 const tareaEditada =await editarTarea(encontrada);
                 const nuevaLista = reemplazarTarea(tareas,tareaEditada);
                 console.log("¡TAREA EDITADA CON EXITO!");
+                
+                await guardarDatosJson(nuevaLista);
                 return nuevaLista;
             }
         }
-        return tareas;
+        return tareas;       
 }
 
 //EDITAR TAREA INTERACCION CON EL USUARIO
@@ -215,14 +217,15 @@ const editarTarea = async ( encontrada:Tarea):Promise<Tarea>=>{
     }
     nuevaDificultad = Number(dificultadIngresada) as Dificultad;
     console.log(`[5] Fecha de vencimiento: ${encontrada.vencimiento}`);
-    let nuevoVencimiento = await preguntar("Ingrese una nueva fecha de vencimiento o enter para dejar la fecha de vencimiento original: ");
-    if(nuevoVencimiento.trim() != ""){
-        while(!validarVencimiento(nuevoVencimiento, new Date())){
-            nuevoVencimiento = await preguntar("Ingrese una fecha de vencimiento valida: ");
+    let nuevoVencimiento = await preguntar("Ingrese una nueva fecha de vencimiento o enter para dejar la fecha de vencimiento original. (Si quiere eliminar el vencimiento ingrese null): ");
+        while(!validarVencimiento(nuevoVencimiento, new Date())&&nuevoVencimiento !== "null"&& nuevoVencimiento.trim() !== ""){
+            nuevoVencimiento = await preguntar("Ingrese una fecha de vencimiento valida, enter para dejar el vencimiento anterior o null para eliminar el vencimiento: ");
         }
-    }
+    
 
     const nuevaTarea = crearTareaEditada(encontrada,nuevoTitulo,nuevaDescripcion,nuevoEstado,nuevaDificultad,nuevoVencimiento,new Date());
+    
+    await guardarDatosJson(tareas);
     return nuevaTarea;
 }
 
@@ -251,7 +254,7 @@ const buscarTareaMenu= async (tareas:Tarea[]):Promise<Tarea[]>=>{
     for(const t of coincidencias){
         console.log(`Id:[${t.id}] ${t.titulo}`);
     }
-    const nuevaLista = await preDetalleId(coincidencias);
+    const nuevaLista = await preDetalleId(tareas,coincidencias);
     return nuevaLista;
 }
 
@@ -259,8 +262,8 @@ const buscarTareaMenu= async (tareas:Tarea[]):Promise<Tarea[]>=>{
 
 //FUNCION PRINCIPAL
 const main = async()=>{
-    //let datosRecuperados = await leerDatos("./datos.txt","utf8");
-    //tareas = [...datosRecuperados];
+    let datosRecuperados = await leerDatos();
+    tareas = [...datosRecuperados];
     while(true){
     console.log("===== GESTOR DE TAREAS =====");
     console.log("[1] Agregar Tarea");

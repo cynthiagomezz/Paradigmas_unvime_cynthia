@@ -27,10 +27,10 @@ export const verDetalleId= ( encontrada:Tarea):void =>{
     console.log(`Dificultad: ${encontrada.dificultad}`);
     console.log(`Fecha de creacion: ${encontrada.creacion.toLocaleDateString("es-AR")}`);
     console.log(`Ultima edicion: ${encontrada.edicion.toLocaleDateString("es-AR")}`);
-    if(encontrada.vencimiento === null){
+    if(encontrada.vencimiento === null || encontrada.vencimiento === null){
         console.log("Vencimiento: Sin vencimiento");
     }
-    else if(!(encontrada.vencimiento === null)){
+    else if(encontrada.vencimiento !== null){
         console.log(`Vencimiento: ${encontrada.vencimiento.toLocaleDateString("es-AR")}`);
     }
 }

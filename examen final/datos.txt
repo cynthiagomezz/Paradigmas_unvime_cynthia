@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "titulo": "estudiar",
+    "descripcion": "pdp",
+    "estado": 3,
+    "vencimiento": "2027-01-09T03:00:00.000Z",
+    "creacion": "2026-11-16T17:16:31.488Z",
+    "edicion": "2026-11-17T04:07:13.945Z",
+    "dificultad": 2
+  },
+  {
+    "id": 2,
+    "titulo": "comprar",
+    "descripcion": "leche",
+    "estado": 3,
+    "vencimiento": null,
+    "creacion": "2026-11-17T02:39:51.370Z",
+    "edicion": "2026-11-17T03:08:52.616Z",
+    "dificultad": 2
+  },
+  {
+    "id": 3,
+    "titulo": "comprar",
+    "descripcion": "titulos",
+    "estado": 4,
+    "vencimiento": null,
+    "creacion": "2026-11-17T02:40:05.541Z",
+    "edicion": "2026-11-17T04:07:59.106Z",
+    "dificultad": 3
+  },
+  {
+    "id": 4,
+    "titulo": "Holass",
+    "descripcion": "",
+    "estado": 1,
+    "vencimiento": null,
+    "creacion": "2026-11-17T02:40:20.317Z",
+    "edicion": "2026-11-17T04:09:21.087Z",
+    "dificultad": 1
+  }
+]
