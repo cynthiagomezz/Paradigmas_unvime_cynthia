@@ -1,6 +1,7 @@
 
 import {Tarea,type Estado,type Dificultad,validarDescripcion,validarTitulo,validarVencimiento} from "./Tarea.js";
-
+import {eliminarTarea} from "./eliminarTarea.js";
+import {ordenarAlfabeticamente,ordenarPorVencimiento,ordenarPorCreacion} from "./ordenarTareas.js";
 import {agregarTarea} from "./agregarTarea.js";
 import {filtrarPorEstado, validarEstado, verDetalleId,buscarPorId} from "./mostrarTareas.js";
 import {crearTareaEditada, reemplazarTarea} from "./editarTarea.js";
@@ -39,13 +40,17 @@ const agregarTareaMenu = async(tareas:Tarea[]):Promise<Tarea[]>=>{
     }
     let Ingresarvencimiento= await preguntar("Ingrese una fecha de vencimiento: ");
     let vencimiento:Date|null = null;
+    if(!validarVencimiento(Ingresarvencimiento,fechaActual)){
         while(!validarVencimiento(Ingresarvencimiento, fechaActual)&& Ingresarvencimiento.trim() !== ""){
         Ingresarvencimiento = await preguntar("Ingrese una fecha valida o enter para continuar: \n");
         if(Ingresarvencimiento.trim()!== ""){
         vencimiento = new Date(Ingresarvencimiento)
     }
     }
-    
+}
+else if (validarVencimiento(Ingresarvencimiento,fechaActual)){
+    vencimiento = new Date(Ingresarvencimiento);
+}
     
     const nuevaTarea:Tarea = new Tarea(tareas,titulo,descripcion,vencimiento);
     tareas = agregarTarea(tareas,nuevaTarea);
@@ -55,6 +60,84 @@ const agregarTareaMenu = async(tareas:Tarea[]):Promise<Tarea[]>=>{
 }
 
 //MOSTRAR TAREA INTERACCION CON EL USUARIO
+//ordenar tareas opciones
+const preOrdernarTareas= async():Promise<number>=>{
+    console.log("Como desea ordenar las tareas?");
+    console.log("[1] Sin Ordenar");
+    console.log("[2] Alfabeticamente");
+    console.log("[3] Por vencimiento proximo");
+    console.log("[4] Por fecha de creacion");
+    let respuesta = Number(await preguntar("Ingrese una opcion: "));
+    while(respuesta>4 || respuesta < 1){
+        respuesta = Number(await preguntar("Ingrese una opcion valida"));
+    }
+    return respuesta;
+}
+const mostrarIdyTitulo=(tareas:Tarea[]):void=>{
+    for(const tarea of tareas){
+        console.log(`${tarea.id}: ${tarea.titulo}`);
+    }
+}
+//Pre detalle id 
+
+const preDetalleId= async(tareas:Tarea[],coincidencias=tareas):Promise<Tarea[]>=>{
+    console.log("[0] Volver");
+        console.log("[1] Ver el detalle de una tarea");
+        let opcion = await preguntar("¿Que desea hacer?: ");
+        while(!Number.isInteger(Number(opcion)) || opcion.trim()=== "" || Number(opcion)<0 || Number(opcion)>1){
+            console.log("Opcion invalida\n");
+            opcion = await preguntar("¿Que desea hacer?: [1] Ver el detalle de una tarea o [0] para volver: ");
+        }
+        if(opcion === "0"){
+           return tareas;
+        }
+        if(opcion === "1"){
+            let opcId = Number(await preguntar("Ingrese el id de la tarea que desea ver: "));
+            let encontrada = buscarPorId(coincidencias,Number(opcId));
+            if(encontrada === undefined){
+                console.log("No se encontro una tarea con ese id");
+                return await preDetalleId(tareas);
+                
+            }
+            await verDetalleId(encontrada);
+            console.log("[0] Volver");
+            console.log("[1] Editar tarea");
+            console.log("[2] Eliminar tarea")
+            let opc = await preguntar("¿Que desea hacer?: ");
+            while(opc.trim() === "" || !Number.isInteger(Number(opc))|| Number(opc) >2 || Number(opc)<0){
+                opc = await preguntar("Ingrese una opcion valida: ");
+            }
+            if(opc === "0"){
+                return tareas;
+            }
+            if(opc === "1"){
+                const tareaEditada =await editarTarea(encontrada);
+                const nuevaLista = reemplazarTarea(tareas,tareaEditada);
+                console.log("¡TAREA EDITADA CON EXITO!");
+                
+                await guardarDatosJson(nuevaLista);
+                return nuevaLista;
+            }
+            if(opc === "2"){
+                console.log("¿Esta seguro que desea eliminar esta tarea?");
+                console.log("[1] Si,Eliminar tarea");
+                console.log("[2] No, volver");
+                let respuesta = await preguntar(": ");
+                while(respuesta !== "1" && respuesta !== "2"){
+                    respuesta = await preguntar("Ingrese una opcion valida:")
+                }
+                if(respuesta === "2"){
+                    return tareas;
+                }
+                if(respuesta === "1"){
+                    let nuevaLista = eliminarTarea(tareas,encontrada);
+                    await guardarDatosJson(nuevaLista);
+                    return nuevaLista;
+                }
+            }
+        }
+        return tareas;       
+}
 
 const mostrarTareaMenu= async(tareas:Tarea[]):Promise<Tarea[]>=>{
     if(tareas.length === 0){
@@ -80,105 +163,129 @@ const mostrarTareaMenu= async(tareas:Tarea[]):Promise<Tarea[]>=>{
     }
 
     if(opcMenu === "1"){
-        for(const tarea of tareas){
-            console.log(`[${tarea.id}]: ${tarea.titulo}\n`);
-        }
-        return await preDetalleId(tareas);
+        let respuesta = await preOrdernarTareas();
+        if(respuesta === 1){
+        mostrarIdyTitulo(tareas);
     }
-
+    if(respuesta === 2){
+        let ordenadasAlf = ordenarAlfabeticamente(tareas);
+        mostrarIdyTitulo(ordenadasAlf); 
+    }
+    if(respuesta === 3){
+        let ordenadasVenc=ordenarPorVencimiento(tareas);
+        mostrarIdyTitulo(ordenadasVenc);
+    }
+    if(respuesta === 4){
+        let ordenadasCreacion = ordenarPorVencimiento(tareas);
+        mostrarIdyTitulo(ordenadasCreacion);
+    }
+    
+    return await preDetalleId(tareas);
+}
     if(opcMenu === "2"){
-        if(filtrarPorEstado(tareas,1).length === 0){
+        let pendientes:Tarea[] = filtrarPorEstado(tareas,1);
+        if(pendientes.length === 0){
             console.log("NO HAY TAREAS PENDIENTES");
             return tareas;
         }
-        for (const tarea of filtrarPorEstado(tareas,1)){
-                     console.log(`[${tarea.id}]: ${tarea.titulo}\n`);
-
-        }
-        return await preDetalleId(tareas);
+        let respuesta = await preOrdernarTareas();
+        if(respuesta === 1){
+        mostrarIdyTitulo(pendientes);
+    }
+    if(respuesta === 2){
+        let ordenadasAlf = ordenarAlfabeticamente(pendientes);
+        mostrarIdyTitulo(ordenadasAlf); 
+    }
+    if(respuesta === 3){
+        let ordenadasVenc=ordenarPorVencimiento(pendientes);
+        mostrarIdyTitulo(ordenadasVenc);
+    }
+    if(respuesta === 4){
+        let ordenadasCreacion = ordenarPorVencimiento(pendientes);
+        mostrarIdyTitulo(ordenadasCreacion);
+    }
+        await preDetalleId(pendientes);
         
     }
     if(opcMenu === "3"){
-        if(filtrarPorEstado(tareas,2).length === 0){
+        let enProceso = filtrarPorEstado(tareas,2);
+        if(enProceso.length === 0){
             console.log("NO HAY TAREAS EN PROCESO");
             return tareas;
         }
-        for (const tarea of filtrarPorEstado(tareas,2)){
-                     console.log(`[${tarea.id}]: ${tarea.titulo}\n`);
-
-        }
-        return await preDetalleId(tareas);
+        let respuesta = await preOrdernarTareas();
+        if(respuesta === 1){
+        mostrarIdyTitulo(enProceso);
+    }
+    if(respuesta === 2){
+        let ordenadasAlf = ordenarAlfabeticamente(enProceso);
+        mostrarIdyTitulo(ordenadasAlf); 
+    }
+    if(respuesta === 3){
+        let ordenadasVenc=ordenarPorVencimiento(enProceso);
+        mostrarIdyTitulo(ordenadasVenc);
+    }
+    if(respuesta === 4){
+        let ordenadasCreacion = ordenarPorVencimiento(enProceso);
+        mostrarIdyTitulo(ordenadasCreacion);
+    }
+        return await preDetalleId(enProceso);
     }
     if(opcMenu === "4"){
-        if(filtrarPorEstado(tareas,3).length === 0){
+        let terminadas = filtrarPorEstado(tareas,3);
+        if(terminadas.length === 0){
             console.log("NO HAY TAREAS TERMINADAS");
             return tareas;
         }
-        for (const tarea of filtrarPorEstado(tareas,3)){
-                     console.log(`[${tarea.id}]: ${tarea.titulo}\n`);
-
-        }
-        return await preDetalleId(tareas);
+        let respuesta = await preOrdernarTareas();
+        if(respuesta === 1){
+        mostrarIdyTitulo(terminadas);
+    }
+    if(respuesta === 2){
+        let ordenadasAlf = ordenarAlfabeticamente(terminadas);
+        mostrarIdyTitulo(ordenadasAlf); 
+    }
+    if(respuesta === 3){
+        let ordenadasVenc=ordenarPorVencimiento(terminadas);
+        mostrarIdyTitulo(ordenadasVenc);
+    }
+    if(respuesta === 4){
+        let ordenadasCreacion = ordenarPorVencimiento(terminadas);
+        mostrarIdyTitulo(ordenadasCreacion);
+    }
+        return await preDetalleId(terminadas);
     }
 
     if(opcMenu === "5"){
-        if(filtrarPorEstado(tareas,4).length === 0){
+        let canceladas = filtrarPorEstado(tareas,4);
+        if(canceladas.length === 0){
             console.log("NO HAY TAREAS CANCELADAS");
             return tareas;
         }
-        for (const tarea of filtrarPorEstado(tareas,4)){
-                     console.log(`[${tarea.id}]: ${tarea.titulo}\n`);
-
-        }
-        return await preDetalleId(tareas);
+        let respuesta = await preOrdernarTareas();
+        if(respuesta === 1){
+        mostrarIdyTitulo(canceladas);
+    }
+    if(respuesta === 2){
+        let ordenadasAlf = ordenarAlfabeticamente(canceladas);
+        mostrarIdyTitulo(ordenadasAlf); 
+    }
+    if(respuesta === 3){
+        let ordenadasVenc=ordenarPorVencimiento(canceladas);
+        mostrarIdyTitulo(ordenadasVenc);
+    }
+    if(respuesta === 4){
+        let ordenadasCreacion = ordenarPorVencimiento(canceladas);
+        mostrarIdyTitulo(ordenadasCreacion);
+    }
+        return await preDetalleId(canceladas);
     }
     return tareas;
 
 }
 
 
-//Pre detalle id 
 
-const preDetalleId= async(tareas:Tarea[],coincidencias=tareas):Promise<Tarea[]>=>{
-    console.log("[0] Volver");
-        console.log("[1] Ver el detalle de una tarea");
-        let opcion = await preguntar("¿Que desea hacer?: ");
-        while(!Number.isInteger(Number(opcion)) || opcion.trim()=== "" || Number(opcion)<0 || Number(opcion)>1){
-            console.log("Opcion invalida\n");
-            opcion = await preguntar("¿Que desea hacer?: [1] Ver el detalle de una tarea o [0] para volver: ");
-        }
-        if(opcion === "0"){
-           return tareas;
-        }
-        if(opcion === "1"){
-            let opcId = Number(await preguntar("Ingrese el id de la tarea que desea ver: "));
-            let encontrada = buscarPorId(coincidencias,Number(opcId));
-            if(encontrada === undefined){
-                console.log("No se encontro una tarea con ese id");
-                return await preDetalleId(tareas);
-                
-            }
-            await verDetalleId(encontrada);
-            console.log("[0] Volver");
-            console.log("[1] Editar tarea");
-            let opc = await preguntar("¿Que desea hacer?: ");
-            while(opc.trim() === "" || !Number.isInteger(Number(opc))|| Number(opc) >1 || Number(opc)<0){
-                opc = await preguntar("Ingrese una opcion valida: ");
-            }
-            if(opc === "0"){
-                return tareas;
-            }
-            if(opc === "1"){
-                const tareaEditada =await editarTarea(encontrada);
-                const nuevaLista = reemplazarTarea(tareas,tareaEditada);
-                console.log("¡TAREA EDITADA CON EXITO!");
-                
-                await guardarDatosJson(nuevaLista);
-                return nuevaLista;
-            }
-        }
-        return tareas;       
-}
 
 //EDITAR TAREA INTERACCION CON EL USUARIO
 
@@ -224,8 +331,6 @@ const editarTarea = async ( encontrada:Tarea):Promise<Tarea>=>{
     
 
     const nuevaTarea = crearTareaEditada(encontrada,nuevoTitulo,nuevaDescripcion,nuevoEstado,nuevaDificultad,nuevoVencimiento,new Date());
-    
-    await guardarDatosJson(tareas);
     return nuevaTarea;
 }
 

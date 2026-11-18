@@ -8,7 +8,7 @@ nuevoVencimiento:string,fechaActual:Date):Tarea=>{
     if(nuevoVencimiento === "null"){
         fecha= null;
     }
-    if(nuevoVencimiento.trim() !== ""){
+    if(nuevoVencimiento.trim() !== "" && nuevoVencimiento !== null){
     const partes = nuevoVencimiento.split("/");
     const dia = Number(partes[0]);
     const mes = Number(partes[1]);

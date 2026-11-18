@@ -31,6 +31,7 @@ export const verDetalleId= ( encontrada:Tarea):void =>{
         console.log("Vencimiento: Sin vencimiento");
     }
     else if(encontrada.vencimiento !== null){
+        encontrada.vencimiento = new Date(encontrada.vencimiento);
         console.log(`Vencimiento: ${encontrada.vencimiento.toLocaleDateString("es-AR")}`);
     }
 }
